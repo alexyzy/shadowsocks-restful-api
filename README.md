@@ -19,7 +19,7 @@ sudo apt-get install nodejs -y
 
 #### Install dependencies:
 ```
-sudo apt-get install -y python-dev make g++
+sudo apt-get install -y python-dev make g++ screen
 cd ~/shadowsocks-restful-api
 npm i
 ```
@@ -48,15 +48,15 @@ echo 'LISTEN_PORT = 4001' >> .env
 
 ## Run
 
-#### Run shadowsocks-libev:
+#### Run shadowsocks-libev in the background:
 ```
-ss-manager -u --manager-address /tmp/shadowsocks-manager.sock --fast-open
+screen -dm ss-manager -u --manager-address /tmp/shadowsocks-manager.sock --fast-open
 ```
 
-#### Run shadowsocks-restful-api:
+#### Run shadowsocks-restful-api in the background:
 ```
 cd ~/shadowsocks-restful-api
-node app.js
+screen -dm node app.js
 ```
 
 ## API
@@ -194,10 +194,6 @@ Response example:
 All the api requests except for login require an Authorization header. The header pattern is: `Authorization: Bearer <token>`. The token can be obtained from the login api.
 
 A token expires in 24 hours. A new token is needed once the old one expires. Tokens can be re-used in multiple requests before exiration.
-
-## Rate limit
-
-A rate limit is applied to the login api. The remaining apis are free from rate limit. The number of requests allowed within one hour window from an ip address to the login api is limited to 10. Requests exceeding the threshold will be refused with HTTP status code `429 Too Many Requests`.
 
 ## Security
 
